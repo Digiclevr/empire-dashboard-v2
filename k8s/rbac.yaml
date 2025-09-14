@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: empire-dashboard-sa
+  namespace: nexia-empire
+  labels:
+    app: empire-dashboard
+    component: nexia-supervisor
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: empire-dashboard-reader
+  labels:
+    app: empire-dashboard
+    component: nexia-supervisor
+rules:
+- apiGroups: [""]
+  resources: 
+  - nodes
+  - pods
+  - services
+  - namespaces
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources:
+  - deployments
+  - replicasets
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["metrics.k8s.io"]
+  resources:
+  - nodes
+  - pods
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: empire-dashboard-binding
+  labels:
+    app: empire-dashboard
+    component: nexia-supervisor
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: empire-dashboard-reader
+subjects:
+- kind: ServiceAccount
+  name: empire-dashboard-sa
+  namespace: nexia-empire
