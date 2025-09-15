@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: empire-dashboard
-  namespace: nexia-empire
+  name: blueocean-dashboard
+  namespace: nexia
   labels:
-    app: empire-dashboard
+    app: blueocean-dashboard
     version: v2.0.0
     component: nexia-supervisor
 spec:
@@ -16,23 +16,23 @@ spec:
       maxSurge: 1
   selector:
     matchLabels:
-      app: empire-dashboard
+      app: blueocean-dashboard
   template:
     metadata:
       labels:
-        app: empire-dashboard
+        app: blueocean-dashboard
         version: v2.0.0
         component: nexia-supervisor
     spec:
-      serviceAccountName: empire-dashboard-sa
+      serviceAccountName: blueocean-dashboard-sa
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001
         runAsGroup: 1001
         fsGroup: 1001
       containers:
-      - name: empire-dashboard
-        image: registry.digitalocean.com/onlyoneapi/empire-dashboard:latest
+      - name: blueocean-dashboard
+        image: registry.digitalocean.com/onlyoneapi/blueocean-dashboard:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 5002
@@ -75,6 +75,6 @@ spec:
       volumes:
       - name: kubeconfig
         secret:
-          secretName: empire-kubeconfig
+          secretName: blueocean-kubeconfig
       imagePullSecrets:
       - name: onlyoneapi-registry

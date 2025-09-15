@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: empire-dashboard-svc
-  namespace: nexia-empire
+  name: blueocean-dashboard-svc
+  namespace: nexia
   labels:
-    app: empire-dashboard
+    app: blueocean-dashboard
     component: nexia-supervisor
 spec:
   type: ClusterIP
@@ -14,4 +14,4 @@ spec:
     protocol: TCP
     name: http
   selector:
-    app: empire-dashboard
+    app: blueocean-dashboard

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: kaniko-empire-config
-  namespace: nexia-empire
+  namespace: nexia
 data:
   build.sh: |
     #!/bin/bash
@@ -16,8 +16,8 @@ data:
     /kaniko/executor \
       --context=git://github.com/ludovicpilet/empire-dashboard-v2.git \
       --dockerfile=Dockerfile \
-      --destination=registry.digitalocean.com/onlyoneapi/empire-dashboard:latest \
-      --destination=registry.digitalocean.com/onlyoneapi/empire-dashboard:$(git rev-parse --short HEAD) \
+      --destination=registry.digitalocean.com/onlyoneapi/blueocean-dashboard:latest \
+      --destination=registry.digitalocean.com/onlyoneapi/blueocean-dashboard:$(git rev-parse --short HEAD) \
       --cache=true \
       --cache-ttl=24h
 ---
@@ -25,7 +25,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: kaniko-empire-build
-  namespace: nexia-empire
+  namespace: nexia
   labels:
     app: kaniko-build
     component: empire-dashboard
@@ -37,32 +37,30 @@ spec:
       containers:
       - name: kaniko
         image: gcr.io/kaniko-project/executor:latest
-        command: ["/bin/sh"]
-        args: ["/scripts/build.sh"]
+        args:
+        - --context=git://github.com/Digiclevr/empire-dashboard-v2.git
+        - --dockerfile=Dockerfile
+        - --destination=registry.digitalocean.com/onlyoneapi/blueocean-dashboard:latest
+        - --cache=true
+        - --cache-ttl=24h
         env:
         - name: DOCKER_CONFIG
           value: /kaniko/.docker
         volumeMounts:
-        - name: build-script
-          mountPath: /scripts
         - name: docker-config
           mountPath: /kaniko/.docker
           readOnly: true
         resources:
           requests:
+            memory: "512Mi"
+            cpu: "200m"
+          limits:
             memory: "1Gi"
             cpu: "500m"
-          limits:
-            memory: "2Gi"
-            cpu: "1000m"
       volumes:
-      - name: build-script
-        configMap:
-          name: kaniko-empire-config
-          defaultMode: 0755
       - name: docker-config
         secret:
-          secretName: onlyoneapi-registry
+          secretName: registry-blueocean
           items:
           - key: .dockerconfigjson
             path: config.json

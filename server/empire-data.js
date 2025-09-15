@@ -1,11 +1,11 @@
-// Empire BlueOcean - Architecture Data v2.0
+// BlueOcean Dashboard - Architecture Data v2.0
 // Basé sur l'analyse complète de l'écosystème /Users/ludovicpilet/PROJECTS
 
-const empireData = {
+const blueoceanData = {
   metadata: {
-    name: "Empire BlueOcean",
+    name: "BlueOcean Ecosystem",
     version: "2.0.0",
-    emperor: "Ludovic Pilet",
+    supervisor: "Ludovic Pilet",
     projects: 10,
     infrastructure: "Kubernetes DigitalOcean",
     lastUpdate: "2025-09-13"
@@ -340,4 +340,4 @@ const empireData = {
   }
 };
 
-module.exports = empireData;
+module.exports = blueoceanData;

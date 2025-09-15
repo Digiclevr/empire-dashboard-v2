@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const empireData = require('./empire-data.js');
+const blueoceanData = require('./empire-data.js');
 const ClusterConnector = require('./cluster-connector.js');
 
 const app = express();
@@ -20,18 +20,18 @@ app.use(express.static(path.join(__dirname, '../client/build')));
 // Empire Architecture - Nouvelle API v2
 app.get('/api/empire', (req, res) => {
   res.json({
-    layers: empireData.hierarchy,
-    flows: empireData.flows,
-    metadata: empireData.metadata,
-    priorities: empireData.priorities
+    layers: blueoceanData.hierarchy,
+    flows: blueoceanData.flows,
+    metadata: blueoceanData.metadata,
+    priorities: blueoceanData.priorities
   });
 });
 
 // Backward compatibility avec v1
 app.get('/api/architecture', (req, res) => {
   res.json({
-    layers: empireData.hierarchy,
-    flows: empireData.flows
+    layers: blueoceanData.hierarchy,
+    flows: blueoceanData.flows
   });
 });
 
@@ -50,9 +50,9 @@ app.get('/api/empire/metrics', async (req, res) => {
       namespaces: clusterMetrics.namespaces,
       services: clusterMetrics.services,
     
-    // Métriques globales Empire
-    empire: {
-      projectsActive: empireData.hierarchy.reduce((total, layer) => 
+    // Métriques globales BlueOcean
+    blueocean: {
+      projectsActive: blueoceanData.hierarchy.reduce((total, layer) => 
         total + (layer.components?.length || 0), 0),
       totalRevenue: generateRandomRevenue(50000, 150000),
       systemHealth: Math.random() > 0.1 ? "healthy" : "warning",
@@ -102,7 +102,7 @@ app.get('/api/empire/metrics', async (req, res) => {
     alerts: generateAlerts(),
     recentActions: [
       { time: "15:00", action: `Cluster BlueOcean connected: ${clusterMetrics.cluster.totalNodes} nodes`, status: "success" },
-      { time: "14:45", action: "Empire Dashboard v2 real-time metrics active", status: "success" },
+      { time: "14:45", action: "BlueOcean Dashboard real-time metrics active", status: "success" },
       { time: "14:30", action: "KREACH deployment staging", status: "success" }
     ],
     
@@ -196,10 +196,10 @@ function generateAlerts() {
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'healthy',
-    service: 'Empire Dashboard v2',
+    service: 'BlueOcean Dashboard',
     timestamp: new Date().toISOString(),
     version: '2.0.0',
-    emperor: 'Ludovic Pilet',
+    supervisor: 'Ludovic Pilet',
     nexia: 'Operational'
   });
 });
@@ -211,8 +211,8 @@ app.get('*', (req, res) => {
 
 // Démarrage serveur
 app.listen(PORT, () => {
-  console.log(`🏰 Empire Dashboard v2 démarré sur le port ${PORT}`);
-  console.log(`👑 Supervision Empire BlueOcean active`);
+  console.log(`🌊 BlueOcean Dashboard démarré sur le port ${PORT}`);
+  console.log(`👑 Supervision écosystème BlueOcean active`);
   console.log(`🧠 Nexia Interface disponible sur http://localhost:${PORT}`);
-  console.log(`📊 API Empire: http://localhost:${PORT}/api/empire`);
+  console.log(`📊 API BlueOcean: http://localhost:${PORT}/api/empire`);
 });
