@@ -1,28 +1,24 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: empire-dashboard-ingress
-  namespace: nexia-empire
+  name: blueocean-dashboard-ingress
+  namespace: nexia
   labels:
-    app: empire-dashboard
+    app: blueocean-dashboard
     component: nexia-supervisor
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
-  tls:
-  - hosts:
-    - nexia.onlyoneapi.com
-    secretName: nexia-tls
+  ingressClassName: nginx
   rules:
-  - host: nexia.onlyoneapi.com
+  - host: blueocean
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: empire-dashboard-svc
+            name: blueocean-dashboard-svc
             port:
               number: 5002
